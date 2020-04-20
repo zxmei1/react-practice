@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
 
+
+class App extends Component {
 
     constructor(props) {
 
@@ -19,15 +20,17 @@ class App extends Component {
         this.getCourses = this.getCourses.bind(this);
         this.addCourse = this.addCourse.bind(this);
         this.deleteCourse = this.deleteCourse.bind(this);
+        this.onCollegeChange = this.onCollegeChange.bind(this);
+        this.onDepartmentChange = this.onDepartmentChange.bind(this);
+        this.onNumberChange = this.onNumberChange.bind(this);
+        this.onSectionChange = this.onSectionChange.bind(this);
+        this.onProfessorChange = this.onProfessorChange.bind(this);
     };
+
 
     getCourses() {
         this.setState({
-            courses: [
-                new Course('CAS', 'PY', '251', 'A1', 'Sushkov', 'CAS PY 251'),
-                new Course('CAS', 'CS', '111', 'C1', 'Sullivan', 'CAS CS 111'),
-                new Course('CAS', 'CS', '350', 'A1', 'Sarkar', 'CAS CS 350'),
-            ]
+            courses: allCourses
         });
     };
 
@@ -45,6 +48,61 @@ class App extends Component {
         this.setState({myCourses});
     };
 
+    onCollegeChange(event) {
+        let courses = allCourses;
+        const col = event.target.value;
+        if (col !== "") {
+            courses = courses.filter((thiscourse) => thiscourse.college.startsWith(col) == true)
+        } else {
+            this.getCourses();
+        };
+        this.setState({courses});
+    };
+
+    onDepartmentChange(event) {
+        let courses = allCourses;
+        const col = event.target.value;
+        if (col !== "") {
+            courses = courses.filter((thiscourse) => thiscourse.department.startsWith(col) == true)
+        } else {
+            this.getCourses();
+        };
+        this.setState({courses});
+    };
+
+    onNumberChange(event) {
+        let courses = allCourses;
+        const col = event.target.value;
+        if (col !== "") {
+            courses = courses.filter((thiscourse) => thiscourse.number.startsWith(col) == true)
+        } else {
+            this.getCourses();
+        };
+        this.setState({courses});
+    };
+
+    onSectionChange(event) {
+        let courses = allCourses;
+        const col = event.target.value;
+        if (col !== "") {
+            courses = courses.filter((thiscourse) => thiscourse.section.startsWith(col) == true)
+        } else {
+            this.getCourses();
+        };
+        this.setState({courses});
+    };
+
+    onProfessorChange(event) {
+        let courses = allCourses;
+        const col = event.target.value;
+        if (col !== "") {
+            courses = courses.filter((thiscourse) => thiscourse.professor.startsWith(col) == true)
+        } else {
+            this.getCourses();
+        };
+        this.setState({courses});
+    };
+
     render() {
         const {columns, courses} = this.state;
         return (
@@ -52,16 +110,23 @@ class App extends Component {
                 <table>
                     <thead>
                     <tr>
-                        <button onClick={this.getCourses}>Get courses</button>
+                        <td><button onClick={this.getCourses}>Get courses</button></td>
                     </tr>
-                    <tr>Course List</tr>
+                    <tr><td>Course List</td></tr>
                     <tr>
                         {columns.map(column => <th key={column}>{column}</th>)}
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        this.state.courses.map(course => <tr key={course.key}>
+                        <tr>
+                            <td><input type={"text"} onChange={this.onCollegeChange}/></td>
+                            <td><input type={"text"} onChange={this.onDepartmentChange}/></td>
+                            <td><input type={"text"} onChange={this.onNumberChange}/></td>
+                            <td><input type={"text"} onChange={this.onSectionChange}/></td>
+                            <td><input type={"text"} onChange={this.onProfessorChange}/></td>
+                        </tr>}
+                    {this.state.courses.map(course => <tr key={course.key}>
                             <td>{course.college}</td>
                             <td>{course.department}</td>
                             <td>{course.number}</td>
@@ -72,7 +137,7 @@ class App extends Component {
                             </td>
                         </tr>)
                     }
-                    <tr>My Courses</tr>
+                    <tr><td>My Courses</td></tr>
                     {
                         this.state.myCourses.map(myCourse => <tr key={myCourse.key}>
                           <td>{myCourse.college}</td>
@@ -94,15 +159,23 @@ class App extends Component {
 }
 
 class Course {
-    constructor(college, dpt, num, section, prof, key) {
+    constructor(college, dpt, num, section, prof) {
         this.college = college;
         this.department = dpt;
         this.number = num;
         this.section = section;
         this.professor = prof;
-        this.key = key;
+        this.key = college + dpt + num;
     }
-}
+};
+
+const allCourses = [
+    new Course('CAS', 'PY', '251', 'A1', 'Sushkov', 'CAS PY 251'),
+    new Course('CAS', 'CS', '111', 'C1', 'Sullivan', 'CAS CS 111'),
+    new Course('CAS', 'CS', '350', 'A1', 'Sarkar', 'CAS CS 350'),
+    new Course('SHA', 'HF', '100', 'BB', 'Anyone', 'SHA HF 100'),
+    new Course('PDP', 'WF', '101', 'B1', 'Michelle', 'PDP WF 101'),
+];
 
 
 export default App;
