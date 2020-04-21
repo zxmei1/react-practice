@@ -18,24 +18,16 @@ class App extends Component {
         this.state = {
             columns, courses, myCourses, filterTerms,
         };
-        this.getCourses = this.getCourses.bind(this);
-        this.addCourse = this.addCourse.bind(this);
-        this.deleteCourse = this.deleteCourse.bind(this);
-        this.onCollegeChange = this.onCollegeChange.bind(this);
-        this.onDepartmentChange = this.onDepartmentChange.bind(this);
-        this.onNumberChange = this.onNumberChange.bind(this);
-        this.onSectionChange = this.onSectionChange.bind(this);
-        this.onProfessorChange = this.onProfessorChange.bind(this);
     };
 
 
-    getCourses() {
+    getCourses = () => {
         this.setState({
             courses: allCourses
         });
     };
 
-    addCourse(course) {
+    addCourse = (course) => {
         let {myCourses} = this.state;
         myCourses = myCourses.filter(individualcourse => individualcourse.key !== course.key);
         myCourses.push(course);
@@ -43,41 +35,41 @@ class App extends Component {
 
     };
 
-    deleteCourse(course) {
+    deleteCourse = (course) => {
         let {myCourses} = this.state;
         myCourses = myCourses.filter((thiscourse) => thiscourse.key !== course.key);
         this.setState({myCourses});
     };
 
-    onCollegeChange(event) {
+    onCollegeChange = (event) => {
         let {filterTerms} = this.state;
         const col = event.target.value;
         filterTerms.college = col;
         this.setState({filterTerms});
     };
 
-    onDepartmentChange(event) {
+    onDepartmentChange = (event) => {
         let {filterTerms} = this.state;
         const dpt = event.target.value;
         filterTerms.department = dpt;
         this.setState({filterTerms});
     };
 
-    onNumberChange(event) {
+    onNumberChange = (event) =>  {
         let {filterTerms} = this.state;
         const num = event.target.value;
         filterTerms.number = num;
         this.setState({filterTerms});
     };
 
-    onSectionChange(event) {
+    onSectionChange = (event) => {
         let {filterTerms} = this.state;
         const sec = event.target.value;
         filterTerms.section = sec;
         this.setState({filterTerms});
     };
 
-    onProfessorChange(event) {
+    onProfessorChange = (event) => {
         let {filterTerms} = this.state;
         const prof = event.target.value;
         filterTerms.professor = prof;
