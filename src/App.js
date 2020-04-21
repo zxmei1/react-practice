@@ -12,10 +12,11 @@ class App extends Component {
 
         const courses = [];
         const myCourses = [];
-        const columns = ['College', 'Department', 'Number', 'Section', 'Professor']
+        const columns = ['College', 'Department', 'Number', 'Section', 'Professor'];
+        const filterTerms = {college:"", department:"", number:"", section:"", professor:""};
 
         this.state = {
-            columns, courses, myCourses
+            columns, courses, myCourses, filterTerms,
         };
         this.getCourses = this.getCourses.bind(this);
         this.addCourse = this.addCourse.bind(this);
@@ -36,10 +37,10 @@ class App extends Component {
 
     addCourse(course) {
         let {myCourses} = this.state;
-        if (myCourses.includes(course) === false) {
-            myCourses.push(course);
-            this.setState({myCourses});
-        };
+        myCourses = myCourses.filter(individualcourse => individualcourse.key !== course.key);
+        myCourses.push(course);
+        this.setState({myCourses});
+
     };
 
     deleteCourse(course) {
@@ -49,58 +50,53 @@ class App extends Component {
     };
 
     onCollegeChange(event) {
-        let courses = allCourses;
+        let {filterTerms} = this.state;
         const col = event.target.value;
-        if (col !== "") {
-            courses = courses.filter((thiscourse) => thiscourse.college.startsWith(col) == true)
-        } else {
-            this.getCourses();
-        };
-        this.setState({courses});
+        filterTerms.college = col;
+        this.setState({filterTerms});
     };
 
     onDepartmentChange(event) {
-        let courses = allCourses;
-        const col = event.target.value;
-        if (col !== "") {
-            courses = courses.filter((thiscourse) => thiscourse.department.startsWith(col) == true)
-        } else {
-            this.getCourses();
-        };
-        this.setState({courses});
+        let {filterTerms} = this.state;
+        const dpt = event.target.value;
+        filterTerms.department = dpt;
+        this.setState({filterTerms});
     };
 
     onNumberChange(event) {
-        let courses = allCourses;
-        const col = event.target.value;
-        if (col !== "") {
-            courses = courses.filter((thiscourse) => thiscourse.number.startsWith(col) == true)
-        } else {
-            this.getCourses();
-        };
-        this.setState({courses});
+        let {filterTerms} = this.state;
+        const num = event.target.value;
+        filterTerms.number = num;
+        this.setState({filterTerms});
     };
 
     onSectionChange(event) {
-        let courses = allCourses;
-        const col = event.target.value;
-        if (col !== "") {
-            courses = courses.filter((thiscourse) => thiscourse.section.startsWith(col) == true)
-        } else {
-            this.getCourses();
-        };
-        this.setState({courses});
+        let {filterTerms} = this.state;
+        const sec = event.target.value;
+        filterTerms.section = sec;
+        this.setState({filterTerms});
     };
 
     onProfessorChange(event) {
-        let courses = allCourses;
-        const col = event.target.value;
-        if (col !== "") {
-            courses = courses.filter((thiscourse) => thiscourse.professor.startsWith(col) == true)
-        } else {
-            this.getCourses();
-        };
-        this.setState({courses});
+        let {filterTerms} = this.state;
+        const prof = event.target.value;
+        filterTerms.professor = prof;
+        this.setState({filterTerms});
+    };
+
+    courseFilter = (course, filterTerms) => {
+        const {college, department, number, section, professor} = filterTerms;
+        if (college === "" || course.college.startsWith(college)) {
+            if (department === "" || course.department.startsWith(department)) {
+                if (number === "" || course.number.startsWith(number)) {
+                    if (section === "" || course.section.startsWith(section)) {
+                        if (professor === "" || course.professor.startsWith(professor)) {
+                            return true};
+                        };
+                    };
+                };
+            };
+        return false;
     };
 
     render() {
@@ -126,7 +122,9 @@ class App extends Component {
                             <td><input type={"text"} onChange={this.onSectionChange}/></td>
                             <td><input type={"text"} onChange={this.onProfessorChange}/></td>
                         </tr>}
-                    {this.state.courses.map(course => <tr key={course.key}>
+                    {this.state.courses
+                        .filter(course => this.courseFilter(course, this.state.filterTerms))
+                        .map(course => <tr key={course.key}>
                             <td>{course.college}</td>
                             <td>{course.department}</td>
                             <td>{course.number}</td>
